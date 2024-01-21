@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+    Edit settings  {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+<h1>Edit settings</h1>
+    <br>
+{{ user.profile.bio }}
+    <br><br><br>
+ <div class="form-control">
+{#<div class="mb-3">#}
+    <form method="POST">
+        {% csrf_token %} {# csrf захист від викрадання інформації #}
+        {{ form.as_p }} {# as_p це типу форма обернута в тег <p>   #}
+    <button class="btn btn-primary" style="background-color: #6f42c1;">Update profile </button>
+    </form>
+</div>
+
+{% endblock %}

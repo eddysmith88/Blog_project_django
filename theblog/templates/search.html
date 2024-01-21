@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}
+    Search page
+{% endblock %}
+
+{% block content %}
+    {% if posts %}
+                <div class="">
+        <ul>
+        {% for post in posts %}
+            <div class="card border-info border-4 p-3 mb-3" style="width: 25rem;">
+              <div class="card-body">
+                <div class="card-header bg-transparent border-info">
+                    <h4><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a></h4>
+                </div>
+                  <br>
+                <h6 class="card-subtitle mb-2 text-muted">{{ post.category }}</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                       by: {{ post.author.first_name }}
+                        {{ post.author.last_name }} -
+                        {{ post.post_date }}
+                  </h6>
+                  <br>
+                <p class="card-text">{{ post.snippet }}</p>
+                <div class="card-footer bg-transparent border-info">
+                    {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                      <small>
+                        <a href="{% url 'update_post' post.pk %}">edit</a>
+                        <a href="{% url 'delete_post' post.pk %}">delete</a>
+                    {% endif %}
+                    {% endif %}
+                      </small>
+                </div>
+
+
+              </div>
+        </div>
+        {% endfor %}
+            <br><br><br><br>
+        </ul>
+        </div>
+
+    {% else %}
+        <h1>Try again</h1>
+    {% endif %}
+
+
+{% endblock %}

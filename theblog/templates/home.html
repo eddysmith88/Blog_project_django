@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Post list</h1>
+{##}
+{#<ul>#}
+{#{% for post in object_list %}#}
+{#    <li><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a>  {# url це посилання на файл застосунку url.py #}
+{#        - <a href="{% url 'category' post.category|slugify %}">{{ post.category }}</a> <br>#}
+{#        by: {{ post.author.first_name }}#}
+{#        {{ post.author.last_name }} -#}
+{#        {{ post.post_date }}#}
+{#        {% if user.is_authenticated %}#}
+{#            {% if user.id == post.author.id %}#}
+{#              <small>#}
+{#                <a href="{% url 'update_post' post.pk %}">edit</a>#}
+{#                <a href="{% url 'delete_post' post.pk %}">delete</a>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{#          </small> <br>#}
+{#    {{ post.snippet }}#}
+{#    </li>#}
+{#    {{ post.body | slice:":500" | safe}}</li>#}
+{##}
+{#{% endfor %}#}
+{#</ul>#}
+
+<div>
+        <ul>
+        {% for post in object_list %}
+            <div class="card border-4 p-3 mb-3" style="width: 45rem; border-color: #6f42c1;">
+              <div class="card-body">
+                <div class="card-header bg-transparent " style="background-color: #6f42c1;">
+                    <h4><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a></h4>
+                </div>
+                  <br>
+                <h6 class="card-subtitle mb-2 text-muted">{{ post.category }}</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                      <img src="{{ user.profile_pic.url }}" width="15" height="15" alt=""> {{ post.author.first_name }}
+                        {{ post.author.last_name }} -
+                        {{ post.post_date }}
+                  </h6>
+                  <br>
+                <p class="card-text">{{ post.snippet }}</p>
+                <div class="card-footer bg-transparent border-info">
+                    {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                      <small>
+                        <a href="{% url 'update_post' post.pk %}">edit</a>
+                        <a href="{% url 'delete_post' post.pk %}">delete</a>
+                    {% endif %}
+                    {% endif %}
+                      </small>
+                </div>
+                {{ post.body | slice:":500" | safe}}
+
+              </div>
+        </div>
+        {% endfor %}
+            <br><br><br><br>
+        </ul>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+    <br>
+ <div class="form-control">
+    <form method="POST">
+        {% csrf_token %} {# csrf захист від викрадання інформації #}
+              <div class="mb-3">
+                <input type="text" class="form-control" name="username" placeholder="Username">
+{#                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>#}
+              </div>
+              <div class="mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+             </div>
+    <button class="btn btn-primary" style="background-color: #6f42c1;">Login</button>
+    </form>
+</div>
+    <br><br>
+    Not register? Sign up <a href="{% url 'register' %}">Here</a>
+
+{% endblock %}

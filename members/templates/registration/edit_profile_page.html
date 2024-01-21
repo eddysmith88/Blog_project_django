@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    Edit profile page {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.id == profile.user.id %}
+        <h1>Edit profile</h1>
+            <br>
+         <div class="form-control">
+        {#<div class="mb-3">#}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %} {# csrf захист від викрадання інформації #}
+                {{ form.as_p }} {# as_p це типу форма обернута в тег <p>   #}
+            <button class="btn btn-primary" style="background-color: #6f42c1;">Update profile page</button>
+            </form>
+        </div>
+
+
+    {% else %}
+
+
+    You are not correct user to edit this page
+    {% endif %}
+     Only authorised users can edit posts
+
+{% endif %}
+{% endblock %}
