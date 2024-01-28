@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+    Delete Blog post {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+        <h1>Delete post</h1>
+            <br>
+            <h3>Delete: {{ post.title }}</h3>
+         <div class="form-control">
+        {#<div class="mb-3">#}
+            <form method="POST">
+                {% csrf_token %}
+                <strong>Are you sure?</strong><br><br>
+            <button class="btn btn-primary" style="background-color: #6f42c1;">Delete Post</button>
+                <br>
+                <br>
+                <a href="{% url 'home' %}" class="btn btn-success">Back</a>
+            </form>
+        </div>
+    {% else %}
+        Only authorised users can edit posts
+    {% endif %}
+{% else %}
+
+Only authorised users can edit posts
+{% endif %}
+{% endblock %}

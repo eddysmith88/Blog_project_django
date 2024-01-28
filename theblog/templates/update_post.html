@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    Edit Blog post {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h1>Update post</h1>
+        <br>
+    {% if user.id == post.author.id %}
+         <div class="form-control">
+        {#<div class="mb-3">#}
+            <form method="POST">
+                {% csrf_token %} {# csrf захист від викрадання інформації #}
+                {{ form.media }} {# підключив ckeditor #}
+                {{ form.as_p }} {# as_p це типу форма обернута в тег <p> може бути як <li> так і <ul>  #}
+            <button class="btn btn-primary" style="background-color: #6f42c1;">Update</button>
+            </form>
+        </div>
+
+    {% else %}
+        Only authorised users can edit posts
+    {% endif %}
+{% else %}
+
+Only authorised users can edit posts
+{% endif %}
+
+{% endblock %}

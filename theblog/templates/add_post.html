@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    Create a new post {# Назва у вкладці #}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h1>Add post</h1>
+        <br>
+     <div class="form-control">
+    {#<div class="mb-3">#}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %} {# csrf захист від викрадання інформації #}
+            {{ form.media }}
+            {{ form.as_p }} {# as_p це типу форма обернута в тег <p>   #}
+        <button class="btn btn-primary" style="background-color: #6f42c1;">Post</button>
+        </form>
+    </div>
+
+     <script>
+            var name = "{{ user.id }}";
+            document.getElementById("eddy").value = name;
+     </script>
+
+{% else %}
+
+Only authorised users can edit posts
+{% endif %}
+{% endblock %}

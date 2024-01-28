@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>User Profile</h1>
+    <br>
+<div class="card mb-3" style="max-width: 540px;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                 {% if page_user.profile_pic %}
+                  <img src="{{ page_user.profile_pic.url }}" class="img-fluid rounded-circle" alt="...">
+                 {% else %}
+                     <img src="{% static 'theblog/images/def_pic.png' %}" class="img-fluid rounded-circle" alt="...">
+                 {% endif %}
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ page_user.user.first_name }}
+                        {{ page_user.user.last_name }}</h5>
+                    <p class="small text-muted">
+
+                        {% if page_user.profile.website_url %}
+                            <a href="{{ page_user.profile.website_url }}">| Website</a> |
+                        {% endif %}
+                        {% if page_user.instagram_url %}
+                            <a href="{{ page_user.instagram_url }}">Instagram</a> |
+                        {% endif %}
+                        {% if page_user.facebook_url %}
+                            <a href="{{ page_user.facebook_url }}">Facebook</a> |
+                        {% endif %}
+                        {% if page_user.telegram_url %}
+                            <a href="{{ page_user.telegram_url }}">Telegram</a>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ page_user.bio }}</p>
+{#                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+{% endblock %}
