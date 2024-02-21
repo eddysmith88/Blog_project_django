@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
     Search page
 {% endblock %}
@@ -7,18 +8,28 @@
     {% if posts %}
                 <div class="">
         <ul>
-        {% for post in posts %}
-            <div class="card border-info border-4 p-3 mb-3" style="width: 25rem;">
+        {% for post in object_list %}
+            <div class="card border-4 p-3 mb-3" style="width: 45rem; border-color: #6f42c1;">
               <div class="card-body">
-                <div class="card-header bg-transparent border-info">
+                <div class="card-header bg-transparent " style="background-color: #6f42c1;">
                     <h4><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a></h4>
                 </div>
                   <br>
                 <h6 class="card-subtitle mb-2 text-muted">{{ post.category }}</h6>
                   <h6 class="card-subtitle mb-2 text-muted">
+                       {% if post.author.profile %}
+                        {% if post.author.profile.profile_pic %}
+                            <img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                        {% else %}
+                            <img src="{% static 'theblog/images/def_pic.png' %}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                        {% endif %}
+                     {% else %}
+                        <img src="{% static 'theblog/images/def_pic.png' %}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                     {% endif %}
                        by: {{ post.author.first_name }}
-                        {{ post.author.last_name }} -
-                        {{ post.post_date }}
+                        {{ post.author.last_name }}
+                         <br><br>
+                        {{ post.post_date|date:"d M Y H:i"}}
                   </h6>
                   <br>
                 <p class="card-text">{{ post.snippet }}</p>
@@ -42,8 +53,39 @@
         </div>
 
     {% else %}
-        <h1>Try again</h1>
+        <h1>Doesnt exists</h1>
     {% endif %}
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">&laquo; First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">{{ num }} <span class="sr-only"></span></span>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
 
 
 {% endblock %}

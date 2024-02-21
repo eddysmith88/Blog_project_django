@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -6,7 +7,7 @@
     <h1>{{ cats }}</h1>
     <ul>
     {% for post in category_posts %}
-        <div class="card border-4 p-3 mb-3" style="width: 45rem; border-color: #6f42c1;">
+       <div class="card border-4 p-3 mb-3" style="width: 45rem; border-color: #6f42c1;">
               <div class="card-body">
                 <div class="card-header bg-transparent " style="background-color: #6f42c1;">
                     <h4><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a></h4>
@@ -14,9 +15,19 @@
                   <br>
                 <h6 class="card-subtitle mb-2 text-muted">{{ post.category }}</h6>
                   <h6 class="card-subtitle mb-2 text-muted">
+                       {% if post.author.profile %}
+                        {% if post.author.profile.profile_pic %}
+                            <img src="{{ post.author.profile.profile_pic.url }}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                        {% else %}
+                            <img src="{% static 'theblog/images/def_pic.png' %}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                        {% endif %}
+                     {% else %}
+                        <img src="{% static 'theblog/images/def_pic.png' %}" class="img-fluid rounded-circle" alt="..." width="50" height="50">
+                     {% endif %}
                        by: {{ post.author.first_name }}
-                        {{ post.author.last_name }} -
-                        {{ post.post_date }}
+                        {{ post.author.last_name }}
+                         <br><br>
+                        {{ post.post_date|date:"d M Y H:i"}}
                   </h6>
                   <br>
                 <p class="card-text">{{ post.snippet }}</p>
@@ -30,7 +41,7 @@
                     {% endif %}
                       </small>
                 </div>
-                {{ post.body | slice:":500" | safe}}
+
 
               </div>
         </div>

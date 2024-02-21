@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -33,6 +34,7 @@ class HomeView(ListView):  # Список постів
     template_name = 'home.html'
     ordering = ['-post_date'] # сортування по даті публікації
     # ordering = ['-id'] # Сортування постів, на початку з останнього доданого айдішнік джанго створив сам
+    paginate_by = 5
 
     def get_context_data(self, *args, **kwargs):
         cat_menu = Category.objects.all()
@@ -132,16 +134,59 @@ def CategoryListView(request):
     cat_menu_list = Category.objects.all()
     return render(request, 'category_list.html', {'cat_menu_list': cat_menu_list})
 
+#
+# def post_list(request):
+#     """
+#     Search view. With django module Q, make many options for search
+#     :param request:
+#     :return:
+#     """
+#     search_query = request.GET.get('search', '')
+#     if search_query:
+#         posts = Post.objects.filter(Q(category__icontains=search_query) | Q(title__icontains=search_query))
+#     else:
+#         posts = Post.objects.all()
+#     paginator = Paginator(posts, 10)  # Кількість постів на сторінці
+#     page = request.GET.get('page')
+#     try:
+#         posts = paginator.page(page)
+#     except PageNotAnInteger:
+#         # Показати першу сторінку, якщо номер сторінки не є цілим числом
+#         posts = paginator.page(1)
+#     except EmptyPage:
+#         # Показати останню сторінку, якщо номер сторінки занадто великий
+#         posts = paginator.page(paginator.num_pages)
+#     return render(request, 'home.html', {'posts': posts})
 
-def post_list(request):
-    """
-    Search view. With django module Q, make many options for search
-    :param request:
-    :return:
-    """
-    search_query = request.GET.get('search', '')
-    if search_query:
-        posts = Post.objects.filter(Q(category__icontains=search_query) | Q(title__icontains=search_query))
-    else:
-        posts = Post.objects.all()
-    return render(request, 'search.html', {'posts': posts})
+
+# def post_list(request):
+#     """
+#     Search view. With django module Q, make many options for search
+#     :param request:
+#     :return:
+#     """
+#     search_query = request.GET.get('search', '')
+#     if search_query:
+#         posts = Post.objects.filter(Q(category__icontains=search_query) | Q(title__icontains=search_query))
+#     else:
+#         posts = Post.objects.all()
+#     return render(request, 'search.html', {'posts': posts})
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'search.html'
+    context_object_name = 'posts'
+    paginate_by = 5  # Кількість постів на сторінці
+
+    def get_queryset(self):
+        search_query = self.request.GET.get('search', '')
+        if search_query:
+            queryset = Post.objects.filter(Q(category__icontains=search_query) | Q(title__icontains=search_query))
+        else:
+            queryset = Post.objects.all()
+        return queryset
+
+
+def tg_index(request):
+    return render(request, 'tg_index.html')
